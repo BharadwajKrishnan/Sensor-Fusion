@@ -11,12 +11,14 @@
 class CLidar
 {
 private:
-	float m_meas_x;
-	float m_meas_y;
+	double m_meas_x;
+	double m_meas_y;
 	long double m_timestamp;
 
 public:
-	CLidar(float x=0.0, float y=0.0, long double timestamp=0.0);
+	CLidar(double x=0.0, double y=0.0, long double timestamp=0.0);
+
+	void print();
 };
 
 #endif /* HELPER_CLIDAR_H_ */
