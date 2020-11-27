@@ -27,7 +27,7 @@ int main()
 	// Read Data from file
 	sensor_data.read();
 
-	lidar_database.print();
+	radar_database.print();
 
 	return 0;
 }

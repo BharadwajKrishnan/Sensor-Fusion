@@ -31,7 +31,8 @@ private:
 public:
 	CData()
 	{
-
+		m_lidar_db = 0;
+		m_radar_db = 0;
 	}
 
 	// Connect to database
@@ -57,7 +58,7 @@ public:
 			if(sensor == "L")
 			{
 				double temp_x, temp_y;
-				long double t;
+				long long t;
 
 				// Read Lidar data
 				m_file>> x >> y >> lidar_timestamp;
@@ -65,7 +66,7 @@ public:
 				// Convert from string to float
 				temp_x = std::atof(x.c_str());
 				temp_y = std::atof(y.c_str());
-				t = (long double)std::atof(lidar_timestamp.c_str());
+				t = (long long)std::atof(lidar_timestamp.c_str());
 
 				// Create lidar object
 				CLidar lidar(temp_x, temp_y, t);
@@ -77,7 +78,7 @@ public:
 			else if(sensor == "R")
 			{
 				double temp_ro, temp_phi, temp_ro_dot;
-				long double t;
+				long long t;
 
 				// Read Radar data
 				m_file>> ro >> phi >> ro_dot >> radar_timestamp;
@@ -86,7 +87,7 @@ public:
 				temp_ro = std::atof(ro.c_str());
 				temp_phi = std::atof(phi.c_str());
 				temp_ro_dot = std::atof(ro_dot.c_str());
-				t = (long double)std::atof(radar_timestamp.c_str());
+				t = (long long)std::atof(radar_timestamp.c_str());
 
 				// Create radar object
 				CRadar radar(temp_ro, temp_phi, temp_ro_dot, t);
