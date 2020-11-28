@@ -10,7 +10,7 @@ using namespace std;
 
 #include "CRadar.h"
 
-CRadar::CRadar(double r, double phi, double r_dot, long double timestamp)
+CRadar::CRadar(double r, double phi, double r_dot, long long timestamp)
 {
 	this->m_rho = r;
 	this->m_phi = phi;
@@ -24,5 +24,18 @@ void CRadar::print()
 	cout<< "Rho = " <<this->m_rho <<endl;
 	cout<< "Phi = " <<this->m_phi <<endl;
 	cout<< "Rho_dot = " <<this->m_rho_dot <<endl;
+}
+
+long long CRadar::get_timestamp()
+{
+	return this->m_timestamp;
+}
+
+void CRadar::update_data(CRadar data)
+{
+	this->m_rho = data.m_rho;
+	this->m_phi = data.m_phi;
+	this->m_rho_dot = data.m_rho_dot;
+	this->m_timestamp = data.m_timestamp;
 }
 

@@ -12,6 +12,8 @@ using namespace std;
 #include "helper/CDatabase.h"
 #include "helper/CData.h"
 
+#include "application/CKalmanFilter.h"
+
 int main()
 {
 	// Database to store sensor data
@@ -27,7 +29,23 @@ int main()
 	// Read Data from file
 	sensor_data.read();
 
-	radar_database.print();
+	// Get list of all timestamps stored in database
+	vector<long long> lidar_ts, radar_ts;
+	lidar_ts = lidar_database.get_timestamps();
+	radar_ts = radar_database.get_timestamps();
+
+	// Get first Lidar measurement
+	vector<long long>::iterator itr;
+	for(itr = lidar_ts.begin(); itr != lidar_ts.end(); itr++)
+	{
+		radar_database.get_from_timestamp(*itr);
+	}
+
+
+	//Initialize the filter with first measurement data
+	CKalmanFilter kf;
+
+	cout <<"All ok" <<endl;
 
 	return 0;
 }

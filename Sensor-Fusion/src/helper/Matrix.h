@@ -46,17 +46,16 @@ public:
 
 
 	// Add data to the vector
-	void add(T data)
+	void change_datas(T data, int row, int col)
 	{
 		// Add elements into the matrix
-		m_data.push_back(data);
+		m_data[row][col] = data;
 	}
 
 	// Print the vector data
 	void print()
 	{
 		typename vector<T>::iterator itr;
-		cout<< "[" <<endl;
 
 		for(int i = 0; i < ROWS; i++)
 		{
@@ -68,7 +67,6 @@ public:
 
 			cout<< "]" <<endl;
 		}
-		cout<< "]" <<endl;
 	}
 };
 

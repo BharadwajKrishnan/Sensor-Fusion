@@ -14,12 +14,21 @@ private:
 	double m_rho;
 	double m_phi;
 	double m_rho_dot;
-	long double m_timestamp;
+	long long m_timestamp;
 
 public:
-	CRadar(double r=0.0, double phi=0.0, double r_dot=0.0, long double timestamp=0.0);
+	CRadar(double r=0.0, double phi=0.0, double r_dot=0.0, long long timestamp=0.0);
 
+	// Print object details
 	void print();
+
+	// Return's timestamp
+	long long get_timestamp();
+
+	// Update radar signals
+	void update_data(CRadar data);
+
+
 };
 
 #endif /* HELPER_CRADAR_H_ */

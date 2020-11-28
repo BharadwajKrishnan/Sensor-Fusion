@@ -13,12 +13,16 @@ class CLidar
 private:
 	double m_meas_x;
 	double m_meas_y;
-	long double m_timestamp;
+	long long m_timestamp;
 
 public:
-	CLidar(double x=0.0, double y=0.0, long double timestamp=0.0);
+	CLidar(double x=0.0, double y=0.0, long long timestamp=0.0);
 
+	// Print object details
 	void print();
+
+	// Return's timestamp
+	long long get_timestamp();
 };
 
 #endif /* HELPER_CLIDAR_H_ */
