@@ -9,24 +9,42 @@
 #ifndef HELPER_MATRIX_H_
 #define HELPER_MATRIX_H_
 
+#include <iostream>
+
 #include <vector>
 using namespace std;
 
-/*
- * Matrix Representation
- *
- * m_data = [a, b, c ......]
- * Size = (N*1)
- */
+//============================================================================
+// Name        : Matrix.h
+// Author      : Bharadwaj
+// Version     : -
+// Copyright   : -
+// Description : Template class definition of a Matrix
+//============================================================================
 
 
-template<class T>
+template<class T, int ROWS, int COLUMNS>
 class Matrix
 {
 private:
-	vector<T> m_data;
+	vector<vector<T> > m_data;
 
 public:
+	Matrix()
+	{
+		vector<T> column;
+		for(int i = 0; i < COLUMNS; i++)
+		{
+			column.push_back(i);
+		}
+
+		for(int i=0; i < ROWS; i++)
+		{
+			m_data.push_back(column);
+		}
+	}
+
+
 	// Add data to the vector
 	void add(T data)
 	{
@@ -38,11 +56,17 @@ public:
 	void print()
 	{
 		typename vector<T>::iterator itr;
-		cout<< "[" ;
-		for(itr = m_data.begin(); itr != m_data.end(); itr++)
-		{
+		cout<< "[" <<endl;
 
-			cout << *itr << " ";
+		for(int i = 0; i < ROWS; i++)
+		{
+			cout<< "[";
+			for(itr = this->m_data[i].begin(); itr != this->m_data[i].end(); itr++)
+			{
+				cout << *itr;
+			}
+
+			cout<< "]" <<endl;
 		}
 		cout<< "]" <<endl;
 	}
