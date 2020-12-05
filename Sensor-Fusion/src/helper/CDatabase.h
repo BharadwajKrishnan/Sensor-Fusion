@@ -68,7 +68,7 @@ public:
 			}
 		}
 
-		cout<< "Timstamp " << timestamp << " does not exist" <<endl;
+		cout<< "Timestamp " << timestamp << " does not exist" <<endl;
 	}
 
 	// Get all timestamps recorded

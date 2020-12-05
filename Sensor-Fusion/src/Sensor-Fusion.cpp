@@ -35,15 +35,17 @@ int main()
 	radar_ts = radar_database.get_timestamps();
 
 	// Get first Lidar measurement
-	vector<long long>::iterator itr;
-	for(itr = lidar_ts.begin(); itr != lidar_ts.end(); itr++)
-	{
-		radar_database.get_from_timestamp(*itr);
-	}
-
+	CLidar lidar_obj = lidar_database.get_from_timestamp(lidar_ts[0]);
 
 	//Initialize the filter with first measurement data
-	CKalmanFilter kf;
+	CKalmanFilter kf(lidar_obj.get_pos_x(), lidar_obj.get_pos_y());
+
+//	kf.print_state_vector();
+//	kf.print_state_transition_vector();
+
+	kf.predict();
+
+
 
 	cout <<"All ok" <<endl;
 
