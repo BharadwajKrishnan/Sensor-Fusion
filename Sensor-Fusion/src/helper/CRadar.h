@@ -11,13 +11,13 @@
 class CRadar
 {
 private:
-	double m_rho;
-	double m_phi;
-	double m_rho_dot;
+	float m_rho;
+	float m_phi;
+	float m_rho_dot;
 	long long m_timestamp;
 
 public:
-	CRadar(double r=0.0, double phi=0.0, double r_dot=0.0, long long timestamp=0.0);
+	CRadar(float r=0.0, float phi=0.0, float r_dot=0.0, long long timestamp=0.0);
 
 	// Print object details
 	void print();
