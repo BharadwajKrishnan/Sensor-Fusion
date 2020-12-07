@@ -32,7 +32,7 @@ CKalmanFilter::CKalmanFilter(float x, float y, float vel_x, float vel_y)
 void CKalmanFilter::print_state_vector()
 {
 	cout<< "State Vector" <<endl;
-	this->m_state_vector.print();
+	this->m_X.print();
 }
 
 void CKalmanFilter::print_state_transition_vector()
@@ -43,12 +43,13 @@ void CKalmanFilter::print_state_transition_vector()
 
 void CKalmanFilter::update_state_matrix(float data, int row, int col)
 {
-	this->m_state_vector.change_data(data, row, col);
+	this->m_X.change_data(data, row, col);
 }
 
 void CKalmanFilter::update_state_transition_matrix(float data, int row, int col)
 {
 	this->m_A.change_data(data, row, col);
+	this->m_A_T.change_data(data, row, col);
 }
 
 void CKalmanFilter::update_process_noise_covariance_matrix(float data, int row, int col)
@@ -61,25 +62,27 @@ void CKalmanFilter::predict()
 	// X(k) = A*X(k-1)
 	// P(k) = A*P(k-1)*A.T
 
-	Matrix<float, 4, 1> X_k;
-	Matrix<float, 4, 4> P_k;
-
 	// X(k) = A*X(k-1)
-	vector<vector<float> > prd = this->m_A * this->m_state_vector;
+	vector<vector<float> > x = this->m_A * this->m_X;
+
+	for(int i = 0; i < this->m_X_kp.get_number_of_rows(); i++)
+		this->m_X_kp.change_data(x[i][0], i, 0);
+
+	this->m_X_kp.print();
 
 	// P(k) = A*P(k-1)*A.T
-	//this->m_A.transpose();
-	//this->m_A.print_transposed();
+	this->m_A_T.transpose();
 
-	this->m_A.print();
-	X_k.change_data(prd[0][0], 0, 0);
-	X_k.change_data(prd[1][0], 1, 0);
-	X_k.change_data(prd[2][0], 2, 0);
-	X_k.change_data(prd[3][0], 3, 0);
+	Matrix<float, 4, 4> Prd;
+	vector<vector<float> > prd_1 = this->m_A * this->m_P;
+	for(int i = 0; i < 4; i++)
+		Prd.change_data(prd_1[i][i], i, i);
 
-	X_k.print();
+	vector<vector<float> > prd_2 = Prd * this->m_A_T;
+	for(int i = 0; i < this->m_X_kp.get_number_of_rows(); i++)
+		this->m_P.change_data(prd_2[i][i], i, i);
 
-
+	this->m_P.print();
 
 }
 

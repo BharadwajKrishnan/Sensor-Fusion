@@ -19,7 +19,6 @@ class Matrix
 {
 private:
 	vector<vector<T> > m_data;
-	vector<vector<T> > m_transpose;
 
 public:
 	Matrix()
@@ -62,16 +61,21 @@ public:
 
 	void transpose()
 	{
+		vector<vector<T> > copy_data;
+		copy_data.assign(m_data.begin(), m_data.end());
+
+		m_data.clear();
+
 		vector<T> transpose_data;
 
 		for(int j = 0; j < this->get_number_of_columns(); j++)
 		{
 			for(int i = 0; i < this->get_number_of_rows(); i++)
 			{
-				transpose_data.push_back(m_data[i][j]);
+				transpose_data.push_back(copy_data[i][j]);
 			}
 
-			m_transpose.push_back(transpose_data);
+			m_data.push_back(transpose_data);
 
 			transpose_data.clear();
 		}
@@ -86,23 +90,6 @@ public:
 		{
 			cout<< "[";
 			for(itr = this->m_data[i].begin(); itr != this->m_data[i].end(); itr++)
-			{
-				cout << *itr <<" ";
-			}
-
-			cout<< "]" <<endl;
-		}
-	}
-
-	// Print the vector data
-	void print_transposed()
-	{
-		typename vector<T>::iterator itr;
-
-		for(int i = 0; i < ROWS; i++)
-		{
-			cout<< "[";
-			for(itr = this->m_transpose[i].begin(); itr != this->m_transpose[i].end(); itr++)
 			{
 				cout << *itr <<" ";
 			}
@@ -141,6 +128,35 @@ public:
 
 		return prod;
 	}
+
+	vector<vector<T> > operator*(Matrix<float, 4, 4> matrix)
+	{
+		vector<vector<T> > prod;
+
+		vector<T> row;
+		if(this->get_number_of_columns() == matrix.get_number_of_rows())
+		{
+			for(int i = 0; i < this->get_number_of_rows(); i++)
+			{
+				for(int j = 0; j < matrix.get_number_of_columns(); j++)
+				{
+					float sum = this->get_data(i, 0) * matrix.get_data(0, j) + this->get_data(i, 1) * matrix.get_data(1, j)
+							+ this->get_data(i, 2) * matrix.get_data(2, j) + this->get_data(i, 3) * matrix.get_data(3, j);
+
+					row.push_back(sum);
+				}
+				prod.push_back(row);
+				row.clear();
+			}
+
+		}
+		else
+		{
+			// Do nothing
+		}
+		return prod;
+	}
+
 };
 
 

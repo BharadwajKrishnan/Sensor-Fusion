@@ -13,7 +13,8 @@
 class CKalmanFilter
 {
 private:
-	Matrix<float, 4, 1> m_state_vector;
+	Matrix<float, 4, 1> m_X;
+	Matrix<float, 4, 1> m_X_kp;
 	Matrix<float, 4, 4> m_A;	// State Transition matrix
 	Matrix<float, 4, 4> m_A_T;	// Transpose of State Transition matrix
 	Matrix<float, 4, 4> m_P;	// Process Noise Co-variance matrix
@@ -31,6 +32,7 @@ public:
 
 	void update_state_matrix(float data, int row, int col);
 
+	// Update X_k and X_kp
 	void update_state_transition_matrix(float data, int row, int col);
 
 	void update_process_noise_covariance_matrix(float data, int row, int col);
