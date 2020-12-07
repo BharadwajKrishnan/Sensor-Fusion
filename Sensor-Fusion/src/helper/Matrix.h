@@ -86,6 +86,8 @@ public:
 	{
 		typename vector<T>::iterator itr;
 
+		cout<< "[" <<endl;
+
 		for(int i = 0; i < ROWS; i++)
 		{
 			cout<< "[";
