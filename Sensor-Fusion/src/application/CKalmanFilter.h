@@ -1,13 +1,15 @@
-/*
- * CKalmanFilter.h
- *
- *  Created on: 27-Nov-2020
- *      Author: Bharadwaj
- */
+//============================================================================
+// Name        : CKalmanFilter.h
+// Author      : Bharadwaj
+// Version     : -
+// Copyright   : Your copyright notice
+// Description : Class Declaration for a Linear Kalman filter
+//============================================================================
 
 #ifndef APPLICATION_CKALMANFILTER_H_
 #define APPLICATION_CKALMANFILTER_H_
 
+#include "../helper/constants.h"
 #include "../helper/Matrix.h"
 
 class CKalmanFilter
@@ -15,11 +17,26 @@ class CKalmanFilter
 private:
 	Matrix<float, 4, 1> m_X;
 	Matrix<float, 4, 1> m_X_kp;
-	Matrix<float, 4, 4> m_A;	// State Transition matrix
-	Matrix<float, 4, 4> m_A_T;	// Transpose of State Transition matrix
+
 	Matrix<float, 4, 4> m_P;	// Process Noise Co-variance matrix
 
-	float m_deltaTime;
+	Matrix<float, 4, 4> m_H;	// Observation matrix
+	Matrix<float, 4, 4> m_H_T;	// Transpose of Observation matrix
+
+	Matrix<float, 4, 4> m_A;	// State Transition matrix
+	Matrix<float, 4, 4> m_A_T;	// Transpose of State Transition matrix
+
+	Matrix<float, 4, 4> m_R;	// Measurement Noise Covariance Matrix
+	Matrix<float, 4, 4> m_Q;	// Process Noise Covariance Matrix
+
+	// Init Methods
+	void initialize_state_matrix(float x, float y, float vel_x, float vel_y);
+	void initialize_process_noise_covariance_matrix();
+	void initialize_R();
+	void initialize_Q();
+
+
+
 public:
 	CKalmanFilter(float x=0.0, float y=0.0, float vel_x=0.0, float vel_y=0.0);
 
@@ -30,12 +47,14 @@ public:
 	// Predict operation
 	void predict();
 
-	void update_state_matrix(float data, int row, int col);
+	// Update operation
+	void update();
 
 	// Update X_k and X_kp
 	void update_state_transition_matrix(float data, int row, int col);
 
-	void update_process_noise_covariance_matrix(float data, int row, int col);
+	void update_observation_matrix(float data, int row, int col);
+
 
 };
 

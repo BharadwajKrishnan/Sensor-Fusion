@@ -40,10 +40,10 @@ int main()
 	//Initialize the filter with first measurement data
 	CKalmanFilter kf(lidar_obj.get_pos_x(), lidar_obj.get_pos_y());
 
-//	kf.print_state_vector();
-//	kf.print_state_transition_vector();
 
 	kf.predict();
+
+	kf.update();
 
 
 
