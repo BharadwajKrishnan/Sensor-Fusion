@@ -67,6 +67,40 @@ void CKalmanFilter::initialize_Q()
 	this->m_Q.change_data(constants::process_var_vel_y, 3, 3);
 }
 
+void CKalmanFilter::calculate_kalman_gain()
+{
+	// K = P(k)*H * (H*P(k)*H.T + R)^-1
+	Matrix<float, 4, 4> Prd_1;
+	{
+		vector<vector<float> > var_1 = this->m_P * this->m_H;
+		Prd_1.change_data(var_1);
+	}
+
+	Matrix<float, 4, 4> Prd_2;
+	{
+		vector<vector<float> > temp_1 = this->m_H * this->m_P;
+		Prd_2.change_data(temp_1);
+	}
+
+	{
+		vector<vector<float> > temp_2 = Prd_2 * this->m_H_T;
+		Prd_2.change_data(temp_2);
+	}
+
+	{
+		vector<vector<float> > temp_3 = Prd_2 + this->m_R;
+		Prd_2.change_data(temp_3);
+	}
+
+	{
+		vector<vector<float> > inv = Prd_2.inverse();
+		Prd_2.change_data(inv);
+	}
+
+	vector<vector<float> > kalman_gain = Prd_1 * Prd_2;
+	this->m_K.change_data(kalman_gain);
+}
+
 void CKalmanFilter::print_state_vector()
 {
 	cout<< "State Vector" <<endl;
@@ -81,10 +115,10 @@ void CKalmanFilter::print_state_transition_vector()
 
 void CKalmanFilter::predict()
 {
-	// X(k) = A*X(k-1)
+	// X_p(k) = A*X(k-1)
 	// P(k) = A*P(k-1)*A.T
 
-	// X(k) = A*X(k-1)
+	// X_p(k) = A*X(k-1)
 
 	vector<vector<float> > x = this->m_A * this->m_X;
 	this->m_X_kp.change_data(x);
@@ -104,31 +138,38 @@ void CKalmanFilter::predict()
 
 }
 
-void CKalmanFilter::update()
+void CKalmanFilter::update(float pos_x, float pos_y, float vel_x, float vel_y)
 {
 	// Calculate the Kalman gain
-	// K = P(k)*H * (H*P(k)*H.T + R)^-1
-	vector<vector<float> > var_1 = this->m_P * this->m_H;
+	this->calculate_kalman_gain();
 
-	Matrix<float, 4, 4> Temp;
-	{
-		vector<vector<float> > temp_1 = this->m_H * this->m_P;
-		Temp.change_data(temp_1);
-	}
+	// Correct the predicted state
+	// X(k) = X_p(k) + K(Z - X_p(k))
+	this->m_Z.change_data(pos_x, 0, 0);
+	this->m_Z.change_data(pos_y, 1, 0);
+	this->m_Z.change_data(vel_x, 2, 0);
+	this->m_Z.change_data(vel_y, 3, 0);
 
-	{
-		vector<vector<float> > temp_2 = Temp * this->m_H_T;
-		Temp.change_data(temp_2);
-	}
+	Matrix<float, 4, 1> innovation;
+	innovation.change_data(this->m_Z - this->m_X_kp);
 
-	{
-		vector<vector<float> > inv = Temp.inverse();
-		Temp.change_data(inv);
-	}
+	Matrix<float, 4, 1> Prd;
+	Prd.change_data(this->m_K * innovation);
 
+	this->m_X.change_data(this->m_X_kp + Prd);
 
+	// P(k) = (I - K*H)*P(k)
+	Matrix<float, 4, 1> Identity;
+	Identity.set_Identity();
 
-	Temp.print();
+	Matrix<float, 4, 1> Prd_1;
+	Prd_1.change_data(this->m_K * this->m_H);
+
+	Matrix<float, 4, 1> Diff;
+	Diff.change_data(Identity - Prd_1);
+
+	this->m_P.change_data(Diff * this->m_P);
+
 
 }
 

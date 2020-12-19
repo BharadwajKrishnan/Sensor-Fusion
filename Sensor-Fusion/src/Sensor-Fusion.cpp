@@ -40,11 +40,14 @@ int main()
 	//Initialize the filter with first measurement data
 	CKalmanFilter kf(lidar_obj.get_pos_x(), lidar_obj.get_pos_y());
 
+	for(int iteration = 1; iteration < lidar_database.size(); iteration++)
+	{
+		lidar_obj = lidar_database.get_from_timestamp(lidar_ts[iteration]);
 
-	kf.predict();
+		kf.predict();
 
-	kf.update();
-
+		kf.update(lidar_obj.get_pos_x(), lidar_obj.get_pos_y(), 0, 0);
+	}
 
 
 	cout <<"All ok" <<endl;

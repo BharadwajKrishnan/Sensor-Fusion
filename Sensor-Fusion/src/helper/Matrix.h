@@ -182,6 +182,84 @@ public:
 		return prod;
 	}
 
+	vector<vector<T> > operator+(Matrix<float, 4, 4> matrix)
+	{
+		vector<vector<T> > sum;
+
+		vector<T> row;
+		if((this->get_number_of_rows() == matrix.get_number_of_rows()) && (this->get_number_of_columns() == matrix.get_number_of_columns()))
+		{
+			for(int i = 0; i < this->get_number_of_rows(); i++)
+			{
+				for(int j = 0; j < this->get_number_of_columns(); j++)
+				{
+					row.push_back(this->get_data(i, j) + matrix.get_data(i, j));
+				}
+				sum.push_back(row);
+				row.clear();
+			}
+		}
+		else
+		{
+			// Do nothing
+		}
+
+		return sum;
+
+	}
+
+	vector<vector<T> > operator+(Matrix<float, 4, 1> matrix)
+	{
+		vector<vector<T> > sum;
+
+		vector<T> row;
+		if((this->get_number_of_rows() == matrix.get_number_of_rows()) && (this->get_number_of_columns() == matrix.get_number_of_columns()))
+		{
+			for(int i = 0; i < this->get_number_of_rows(); i++)
+			{
+				for(int j = 0; j < this->get_number_of_columns(); j++)
+				{
+					row.push_back(this->get_data(i, j) + matrix.get_data(i, j));
+				}
+				sum.push_back(row);
+				row.clear();
+			}
+		}
+		else
+		{
+			// Do nothing
+		}
+
+		return sum;
+
+	}
+
+	vector<vector<T> > operator-(Matrix<float, 4, 1> matrix)
+	{
+		vector<vector<T> > difference;
+
+		vector<T> row;
+		if((this->get_number_of_rows() == matrix.get_number_of_rows()) && (this->get_number_of_columns() == matrix.get_number_of_columns()))
+		{
+			for(int i = 0; i < this->get_number_of_rows(); i++)
+			{
+				for(int j = 0; j < this->get_number_of_columns(); j++)
+				{
+					row.push_back(this->get_data(i, j) - matrix.get_data(i, j));
+				}
+				difference.push_back(row);
+				row.clear();
+			}
+		}
+		else
+		{
+			// Do nothing
+		}
+
+		return difference;
+
+	}
+
 	vector<vector<T> > inverse()
 	{
 		float det_1 = (m_data[1][1] * m_data[2][2] * m_data[3][3]) + (m_data[1][2] * m_data[2][3] * m_data[3][1]) + (m_data[1][3] * m_data[2][1] * m_data[3][2])

@@ -29,12 +29,17 @@ private:
 	Matrix<float, 4, 4> m_R;	// Measurement Noise Covariance Matrix
 	Matrix<float, 4, 4> m_Q;	// Process Noise Covariance Matrix
 
+	Matrix<float, 4, 4> m_K;	// Kalman gain
+
+	Matrix<float, 4, 1> m_Z;	// Measurement Input
+
 	// Init Methods
 	void initialize_state_matrix(float x, float y, float vel_x, float vel_y);
 	void initialize_process_noise_covariance_matrix();
 	void initialize_R();
 	void initialize_Q();
 
+	void calculate_kalman_gain();
 
 
 public:
@@ -48,7 +53,7 @@ public:
 	void predict();
 
 	// Update operation
-	void update();
+	void update(float pos_x, float pos_y, float vel_x, float vel_y);
 
 	// Update X_k and X_kp
 	void update_state_transition_matrix(float data, int row, int col);
