@@ -85,6 +85,12 @@ public:
 
 		return timestamps;
 	}
+
+	// Get Databas size
+	int size()
+	{
+		return m_database.size();
+	}
 };
 
 #endif /* HELPER_CDATABASE_H_ */
