@@ -165,12 +165,16 @@ void CKalmanFilter::update(float pos_x, float pos_y, float vel_x, float vel_y)
 	Matrix<float, 4, 1> Prd_1;
 	Prd_1.change_data(this->m_K * this->m_H);
 
-	Matrix<float, 4, 1> Diff;
+	Matrix<float, 4, 4> Diff;
 	Diff.change_data(Identity - Prd_1);
 
 	this->m_P.change_data(Diff * this->m_P);
 
+}
 
+Matrix<float, 4, 1>& CKalmanFilter::get_estimate()
+{
+	return m_X;
 }
 
 
