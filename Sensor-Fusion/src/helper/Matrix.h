@@ -36,18 +36,6 @@ public:
 		}
 	}
 
-	// Add data to the vector
-	void change_data(vector<vector<T> > data)
-	{
-		for(int row = 0; row < this->get_number_of_rows(); row++)
-		{
-			for(int col = 0; col < this->get_number_of_columns(); col++)
-			{
-				this->m_data[row][col] = data[row][col];
-			}
-		}
-	}
-
 	void change_data(T data, int row, int col)
 	{
 		this->m_data[row][col] = data;
@@ -70,6 +58,11 @@ public:
 	T get_data(int row, int col)
 	{
 		return m_data[row][col];
+	}
+
+	void set_data(T data, int row, int col)
+	{
+		m_data[row][col] = data;
 	}
 
 	// Get number of rows
@@ -234,7 +227,8 @@ public:
 
 	}
 
-	vector<vector<T> > operator-(Matrix<float, 4, 1> matrix)
+	template<typename X>
+	vector<vector<T> > operator-(X matrix)
 	{
 		vector<vector<T> > difference;
 
@@ -258,6 +252,18 @@ public:
 
 		return difference;
 
+	}
+
+	template<typename U>
+	void operator=(U matrix)
+	{
+		for(int row = 0; row < this->get_number_of_rows(); row++)
+		{
+			for(int col = 0; col < this->get_number_of_columns(); col++)
+			{
+				this->m_data[row][col] = matrix[row][col];
+			}
+		}
 	}
 
 	vector<vector<T> > inverse()

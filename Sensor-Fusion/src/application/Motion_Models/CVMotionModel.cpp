@@ -12,10 +12,10 @@
 using namespace std;
 
 /*
- * F = [[1, 0, 0, 0],
- * 		[0, 1, 0, 0],
- * 		[0, 0, dt, 0],
- * 		[0, 0, 0, dt]]
+ * F = [[1, 0, dt, 0],
+ * 		[0, 1, 0, dt],
+ * 		[0, 0, 1, 0],
+ * 		[0, 0, 0, 1]]
  */
 
 CVMotionModel::CVMotionModel()
@@ -32,7 +32,7 @@ void CVMotionModel::predict(Matrix<float, 4, 1>& x, float deltaTime, Matrix<floa
 
 	outP = temp * this->m_F_T;
 
-	//outP = outP;//+ this->m_Q;
+	outP = outP + this->m_Q;
 
 }
 
