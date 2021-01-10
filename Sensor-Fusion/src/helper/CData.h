@@ -15,6 +15,7 @@
 
 #include "CLidar.h"
 #include "CRadar.h"
+#include "CEgo.h"
 
 using namespace std;
 
@@ -27,19 +28,60 @@ private:
 
 	CDatabase<CLidar>* m_lidar_db;
 	CDatabase<CRadar>* m_radar_db;
+	CDatabase<CEgo>* m_ego_db;
 
 public:
 	CData()
 	{
 		m_lidar_db = 0;
 		m_radar_db = 0;
+		m_ego_db = 0;
 	}
 
 	// Connect to database
-	void connectToDatabase(CDatabase<CLidar>* lidar_db, CDatabase<CRadar>* radar_db)
+	void connectToDatabase(CDatabase<CLidar>* lidar_db, CDatabase<CRadar>* radar_db, CDatabase<CEgo>* ego_db)
 	{
 		m_lidar_db = lidar_db;
 		m_radar_db = radar_db;
+		m_ego_db = ego_db;
+	}
+
+	// Read Ego data from file
+	void read_ego()
+	{
+		string line;
+
+		fstream file;
+		file.open("C:/GitRepo/Some_Interesting_Projects/Sensor-Fusion/Sensor-Fusion/src/helper/ego_data.txt", ios::in);
+		while(getline(file, line))
+		{
+			cout << line <<endl;
+			string x, y, vel_x, vel_y, acc_x, acc_y, timestamp;
+
+			// Read Ego data
+			file>>timestamp >> x >> y >> vel_x >> vel_y >> acc_x >> acc_y;
+
+			double temp_x, temp_y, temp_vel_x, temp_vel_y, temp_acc_x, temp_acc_y;
+			long long t;
+
+			// Convert from string to float
+			temp_x = std::atof(x.c_str());
+			temp_y = std::atof(y.c_str());
+			temp_vel_x = std::atof(vel_x.c_str());
+			temp_vel_y = std::atof(vel_y.c_str());
+			temp_acc_x = std::atof(acc_x.c_str());
+			temp_acc_y = std::atof(acc_y.c_str());
+			t = (long long)std::atof(timestamp.c_str());
+
+			// Create ego object
+			CEgo ego(temp_x, temp_y, temp_vel_x, temp_vel_y, temp_acc_x, temp_acc_y, t);
+
+			// Add to database
+			m_ego_db->addSensorData(ego);
+		}
+
+		file.close();
+
 	}
 
 	// Read sensor data from file

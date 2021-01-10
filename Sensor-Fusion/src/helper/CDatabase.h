@@ -12,6 +12,7 @@
 #include <iostream>
 #include <list>
 #include "CLidar.h"
+#include "CEgo.h"
 
 using namespace std;
 
