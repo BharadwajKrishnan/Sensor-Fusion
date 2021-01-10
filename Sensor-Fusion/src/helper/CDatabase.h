@@ -13,6 +13,7 @@
 #include <list>
 #include <vector>
 #include "CLidar.h"
+#include "CEgo.h"
 #include "CRadar.h"
 
 using namespace std;
