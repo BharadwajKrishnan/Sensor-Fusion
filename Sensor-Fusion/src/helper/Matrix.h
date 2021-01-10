@@ -36,11 +36,6 @@ public:
 		}
 	}
 
-	void change_data(T data, int row, int col)
-	{
-		this->m_data[row][col] = data;
-	}
-
 	void set_Identity()
 	{
 		for(int row = 0; row < this->get_number_of_rows(); row++)
@@ -175,33 +170,8 @@ public:
 		return prod;
 	}
 
-	vector<vector<T> > operator+(Matrix<float, 4, 4> matrix)
-	{
-		vector<vector<T> > sum;
-
-		vector<T> row;
-		if((this->get_number_of_rows() == matrix.get_number_of_rows()) && (this->get_number_of_columns() == matrix.get_number_of_columns()))
-		{
-			for(int i = 0; i < this->get_number_of_rows(); i++)
-			{
-				for(int j = 0; j < this->get_number_of_columns(); j++)
-				{
-					row.push_back(this->get_data(i, j) + matrix.get_data(i, j));
-				}
-				sum.push_back(row);
-				row.clear();
-			}
-		}
-		else
-		{
-			// Do nothing
-		}
-
-		return sum;
-
-	}
-
-	vector<vector<T> > operator+(Matrix<float, 4, 1> matrix)
+	template<typename Z>
+	vector<vector<T> > operator+(Z matrix)
 	{
 		vector<vector<T> > sum;
 

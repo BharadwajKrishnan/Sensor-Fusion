@@ -25,6 +25,16 @@ public:
 	CEgo(float x=0.0, float y=0.0, float v_x=0.0, float v_y=0.0, float a_x=0.0, float a_y=0.0, long long t=0);
 
 	void print();
+
+	float get_pos_x();
+
+	float get_pos_y();
+
+	float get_vel_x();
+
+	float get_vel_y();
+
+	long long get_timestamp();
 };
 
 #endif /* HELPER_CEGO_H_ */

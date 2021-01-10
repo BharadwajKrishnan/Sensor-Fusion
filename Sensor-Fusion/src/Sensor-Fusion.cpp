@@ -19,36 +19,46 @@ int main()
 	// Database to store sensor data
 	CDatabase<CLidar> lidar_database;
 	CDatabase<CRadar> radar_database;
+	CDatabase<CEgo> ego_database;
 
 	// Declare object to read sensor data from file
-	CData<float> sensor_data;
+	CData<float> data;
 
 	// Connect to database
-	sensor_data.connectToDatabase(&lidar_database, &radar_database);
+	data.connectToDatabase(&lidar_database, &radar_database, &ego_database);
 
 	// Read Data from file
-	sensor_data.read();
+	data.read();
+
+	data.read_ego();
 
 	// Get list of all timestamps stored in database
-	vector<long long> lidar_ts, radar_ts;
-	lidar_ts = lidar_database.get_timestamps();
-	radar_ts = radar_database.get_timestamps();
+	vector<long long> ego_ts;
+	ego_ts = ego_database.get_timestamps();
 
 	// Get first Lidar measurement
-	CLidar lidar_obj = lidar_database.get_from_timestamp(lidar_ts[0]);
+	CEgo ego = ego_database.get_from_timestamp(ego_ts[0]);
 
 	//Initialize the filter with first measurement data
-	CKalmanFilter kf(lidar_obj.get_pos_x(), lidar_obj.get_pos_y());
+	CKalmanFilter kf(ego.get_pos_x(), ego.get_pos_y(), ego.get_vel_x(), ego.get_vel_y());
 
-	for(int iteration = 1; iteration < lidar_database.size(); iteration++)
+	vector<Matrix<float, 4, 1> > output;
+
+	for(int iteration = 1; iteration < ego_database.size(); iteration++)
 	{
-		lidar_obj = lidar_database.get_from_timestamp(lidar_ts[iteration]);
+		// Compute delta time
+		float deltaTime = static_cast<float>((ego_ts[iteration] - ego_ts[iteration - 1])/1000000000.0);
 
-		kf.predict();
+		ego = ego_database.get_from_timestamp(ego_ts[iteration]);
 
-		kf.update(lidar_obj.get_pos_x(), lidar_obj.get_pos_y(), 0, 0);
+		kf.predict(deltaTime);
+
+		kf.update(ego.get_pos_x(), ego.get_pos_y(), ego.get_vel_x(), ego.get_vel_y());
+
+		output.push_back(kf.get_estimate());
 	}
 
+	data.write(output);
 
 	cout <<"All ok" <<endl;
 

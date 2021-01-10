@@ -16,6 +16,7 @@
 #include "CLidar.h"
 #include "CRadar.h"
 #include "CEgo.h"
+#include "Matrix.h"
 
 using namespace std;
 
@@ -55,7 +56,6 @@ public:
 		file.open("C:/GitRepo/Some_Interesting_Projects/Sensor-Fusion/Sensor-Fusion/src/helper/ego_data.txt", ios::in);
 		while(getline(file, line))
 		{
-			cout << line <<endl;
 			string x, y, vel_x, vel_y, acc_x, acc_y, timestamp;
 
 			// Read Ego data
@@ -145,6 +145,19 @@ public:
 		}
 
 		m_file.close();
+	}
+
+	void write(vector<Matrix<float, 4, 1> > output)
+	{
+		m_file.open("C:/GitRepo/Some_Interesting_Projects/Sensor-Fusion/Sensor-Fusion/src/helper/out.txt", ios::out);
+
+		vector<Matrix<float, 4, 1> >::iterator itr;
+
+		for(itr = output.begin(); itr != output.end(); itr++)
+		{
+			m_file<< itr->get_data(0, 0) << "\t" << itr->get_data(1, 0) << "\n";
+		}
+
 	}
 };
 

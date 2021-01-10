@@ -35,3 +35,28 @@ void CEgo::print()
 	cout<< "AccX = " <<this->m_acc_x <<endl;
 	cout<< "AccY = " <<this->m_acc_y <<endl;
 }
+
+float CEgo::get_pos_x()
+{
+	return m_pos_x;
+}
+
+float CEgo::get_pos_y()
+{
+	return m_pos_y;
+}
+
+float CEgo::get_vel_x()
+{
+	return m_vel_x;
+}
+
+float CEgo::get_vel_y()
+{
+	return m_vel_y;
+}
+
+long long CEgo::get_timestamp()
+{
+	return m_timestamp;
+}
